@@ -1,2 +1,2 @@
 # test-ai
-Rust, ML, trading///
+Rust, ML, trading...
