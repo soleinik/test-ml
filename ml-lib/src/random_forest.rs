@@ -3,6 +3,7 @@ use std::{error::Error, path::Path};
 use linfa::prelude::*;
 use linfa::traits::Fit;
 use linfa_preprocessing::linear_scaling::LinearScaler;
+use log::trace;
 use ndarray::{s, Ix1};
 use polars::{datatypes::Float64Type, frame::DataFrame, prelude::IndexOrder};
 
@@ -31,11 +32,12 @@ fn run(df: &DataFrame) -> Result<(), Box<dyn Error>> {
         .with_feature_names(feature_names.clone());
 
     let model = linfa::traits::Fit::fit(&LinearScaler::<f64>::min_max(), &dataset)?;
-
     let ds_transformed: Dataset<f64, usize, Ix1> = model.transform(dataset); //: Dataset<f64, usize, Ix1>
 
+    //normalized
+    trace!("{ds_transformed:#?}");
+
     use linfa_trees::DecisionTree;
-    //let dataset = linfa_datasets::iris();
     let tree = DecisionTree::params().fit(&ds_transformed).unwrap();
 
     let accuracy = tree
