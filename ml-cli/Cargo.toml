@@ -1,0 +1,17 @@
+[package]
+name = "ml-cli"
+version.workspace = true
+edition.workspace = true
+description = "Demo CLI wrapper"
+authors = ["S. Oleinik <soleinik.1@gmail.com>"]
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ml-lib = { path = "../ml-lib" }
+
+clap = "4.0"
+
+log = "0.4"
+env_logger = "0.11"

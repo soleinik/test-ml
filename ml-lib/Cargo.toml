@@ -1,0 +1,21 @@
+[package]
+name = "ml-lib"
+version.workspace = true
+edition.workspace = true
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+log = "0.4"
+
+linfa = "0.7"
+linfa-preprocessing = "0.7"
+linfa-trees = "0.7"
+
+
+ndarray = { version = "0.15", default-features = false }
+polars = { version = "0.37.0", features = ["lazy", "ndarray", "csv"] }
+
+automl = { version = "0.2.7", features = ["nd"] }
+smartcore = { version = "0.2.1", features = ["serde", "datasets"] }
