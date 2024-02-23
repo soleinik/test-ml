@@ -85,7 +85,7 @@ Options:
 
 ```
 ### Executable `ml-cli`
-When successfuly build, executable will be located in either `./target/debug` or `./target/release` folder, depends on `--debug`(default) or `--release` flag passed to `cargo build`. Move executable `ml-cli` together with `./data/*` forder into same location. After that invoke it as follows
+When successfuly built, executable will be located in either `./target/debug` or `./target/release` folder, depends on `--debug`(default) or `--release` flag passed to `cargo build`. Move executable `ml-cli` together with `./data/*` forder into same location. After that invoke it as follows
 
 ```
 $ ./ml-cli -h
