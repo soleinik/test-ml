@@ -2,7 +2,7 @@
 
 ## About
 The project's goal is to implement start to end file load with [polars](https://crates.io/crates/polars) and use [linfa](https://crates.io/crates/linfa) crates to learn and predict financial time series data, with [ndarray](https://crates.io/crates/ndarray) in between.
-Project is build from two parts [CLI](/ml-cli/) and [library](/ml-lib/). For now [data](/data/) is local folder that shoud be substituted, in future, with a financial data fetching API (i.e. [yahoo_finance_api](https://crates.io/crates/yahoo_finance_api))
+Project is build from two parts [CLI](/ml-cli/) and [library](/ml-lib/). For now [data](/data/) is in local folder that shoud be substituted, in future, with a financial data fetching API (i.e. [yahoo_finance_api](https://crates.io/crates/yahoo_finance_api))
 
 
 ## Status
