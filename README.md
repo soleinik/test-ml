@@ -36,7 +36,7 @@ NOTE: the goal is not actually make correct prediction, rather understand `polar
 
 
 ```
-$ git clone https://github.com/soleinik/test-ai.git && cd test-ai
+$ git clone https://github.com/soleinik/test-ml.git && cd test-ml
 [...]
 $ cargo build --release
 ```
