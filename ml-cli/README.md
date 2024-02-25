@@ -3,7 +3,12 @@
 This is suplementary project for demo purposes, to provide some interactivity to [ml-lib](../ml-lib/) library. It uses [clap](https://crates.io/crates/clap) to systematize, integrity and validation of user supplied command line options, as well as self explanatory (hopefuly!) user help. 
 
 ## Status
-There is no intention to cover all [linfa](https://crates.io/crates/linfa) ML algorithms... Just a few to get fill of "plumming" needed to connect data to Linfa algorithms. Currently, only the following Linfa's decision tree (`random forest`???)  works, that can be invoked as follows
+There is no intention to cover all [linfa](https://crates.io/crates/linfa) ML algorithms... Just a few to get fill of "plumming" needed to connect data to Linfa algorithms. 
+Currently, only the following Linfa's algorithms implemented
+- decision tree (`random forest`???), flags `-Ccdr`
+- SVM (upport vector machines), flags `-Ccss`
+
+
 ```
 $ ./target/debug/ml-cli -Ccdr -h
 [r]andom forest learning algorithm

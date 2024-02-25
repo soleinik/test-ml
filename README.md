@@ -8,7 +8,12 @@ Project is build from two parts [CLI](/ml-cli/) and [library](/ml-lib/). For now
 ## Status
 Work-in-progress. At this moment only (list what is implemented) 
 
-Currently, only the following Linfa's decision tree (`random forest`???)  works, that can be invoked as follows
+Currently, only the following Linfa's algorithms implemented
+- decision tree (`random forest`???), flags `-Ccdr`
+- SVM (upport vector machines), flags `-Ccss`
+
+
+  works, that can be invoked as follows
 ```
 $ ./target/debug/ml-cli -Ccdr -h
 [r]andom forest learning algorithm
