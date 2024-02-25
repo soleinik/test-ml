@@ -11,9 +11,11 @@ use polars::lazy::{
 
 mod algo_01;
 pub mod random_forest;
+pub mod svm;
 
 pub mod preamble {
     pub use super::random_forest;
+    pub use super::svm;
 }
 
 //Date,Open,High,Low,Close,Adj Close,Volume

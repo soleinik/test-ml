@@ -30,7 +30,9 @@ pub enum SupervisedType {
         sub: decision_trees::DecisionTrees,
     },
     /// Support Vector Machines
-    SVM,
+    SVM {
+        sub: svm::SupportVectorMachines,
+    },
     Bayes,
     PLS,
 }
@@ -40,7 +42,7 @@ impl Runner for SupervisedType {
         match self {
             SupervisedType::ElasticNet => todo!(),
             SupervisedType::DecisionTree { sub } => sub.run(cli),
-            SupervisedType::SVM => todo!(),
+            SupervisedType::SVM { sub } => sub.run(cli),
             SupervisedType::Bayes => todo!(),
             SupervisedType::PLS => todo!(),
         }
@@ -61,7 +63,9 @@ impl TryFrom<&ArgMatches> for SupervisedType {
             decision_trees::CMD_DECISION_TREE => Ok(SupervisedType::DecisionTree {
                 sub: decision_trees::DecisionTrees::try_from(nxt_matches)?,
             }),
-            "SVM" => Ok(SupervisedType::SVM),
+            svm::CMD_SVM => Ok(SupervisedType::SVM {
+                sub: svm::SupportVectorMachines::try_from(nxt_matches)?,
+            }),
             "Bayes" => Ok(SupervisedType::Bayes),
             "PLS" => Ok(SupervisedType::PLS),
 
