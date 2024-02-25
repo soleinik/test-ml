@@ -33,7 +33,7 @@ fn run(df: &DataFrame) -> Result<(), Box<dyn Error>> {
         .map_targets(|x| *x as usize)
         .with_feature_names(feature_names.clone());
 
-    let (train, valid) = dataset.split_with_ratio(0.9);
+    let (train, test) = dataset.split_with_ratio(0.9);
 
     let params = Svm::<_, Pr>::params().gaussian_kernel(30.0);
 
@@ -44,8 +44,8 @@ fn run(df: &DataFrame) -> Result<(), Box<dyn Error>> {
         .map(|(k, x)| (k, params.fit(&x).unwrap()))
         .collect::<MultiClassModel<_, _>>();
 
-    let predict = model.predict(&valid);
-    let cm = predict.confusion_matrix(&valid)?;
+    let predict = model.predict(&test);
+    let cm = predict.confusion_matrix(&test)?;
     println!("confusion matrix:{cm:?}");
     let accuracy = cm.accuracy();
     println!("accuracy:{accuracy}");

@@ -12,7 +12,7 @@ pub fn doit<P: AsRef<Path>>(base: P, sup: P) -> Result<(), Box<dyn std::error::E
 }
 
 fn run(df: &DataFrame) -> Result<(), Box<dyn Error>> {
-    let array = df.to_ndarray::<Float64Type>(IndexOrder::default())?;
+    let array = df.to_ndarray::<Float64Type>(IndexOrder::C)?;
 
     let last_col = array.ncols() - 1;
 
@@ -37,57 +37,16 @@ fn run(df: &DataFrame) -> Result<(), Box<dyn Error>> {
     //normalized
     trace!("{ds_transformed:#?}");
 
+    let (train, test) = ds_transformed.split_with_ratio(0.9);
+
     use linfa_trees::DecisionTree;
-    let tree = DecisionTree::params().fit(&ds_transformed).unwrap();
+    let model = DecisionTree::params().fit(&train).unwrap();
 
-    let accuracy = tree
-        .predict(&ds_transformed)
-        .confusion_matrix(&ds_transformed)
-        .unwrap()
-        .accuracy();
-
+    let predict = model.predict(&test);
+    let cm = predict.confusion_matrix(&test)?;
+    println!("confusion matrix:{cm:?}");
+    let accuracy = cm.accuracy();
     println!("accuracy:{accuracy}");
-
-    //b-close, b-volume, a-volume, a-close
-    let test_pd = [
-        5003.140137,
-        5032.720215,
-        4999.439941,
-        5029.72998,
-        4_137_970_000_f64,
-        4_714_300_f64,
-        186.869995,
-    ];
-    //2024-02-16
-    let test_td = [
-        5_031.129883,
-        5_038.700195,
-        4_999.52002,
-        5_005.569824,
-        3_833_270_000_f64,
-        4_841_900_f64,
-        187.639999,
-    ];
-
-    //2024-02-20
-    let test_nd = [
-        5_031.13, //b-open
-        4_993.71, //b-h
-        4_955.02, //b-l
-        4_975.51, //b-c
-        2_454_586_000_f64,
-        4_242_877_f64,
-        183.44,
-    ];
-
-    use ndarray::array;
-    let records = array![test_pd, test_td, test_nd];
-    let targets = array![0, 0, 0];
-
-    let dataset = linfa::Dataset::new(records, targets).with_feature_names(feature_names);
-
-    let zz = tree.predict(&dataset);
-    println!("predicted:{zz}");
 
     Ok(())
 }
