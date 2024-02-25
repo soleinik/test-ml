@@ -10,11 +10,11 @@ use linfa_svm::Svm;
 use ndarray::s;
 use polars::{datatypes::Float64Type, frame::DataFrame, prelude::IndexOrder};
 
-pub fn doit<P: AsRef<Path>>(base: P, sup: P) -> Result<(), Box<dyn std::error::Error>> {
-    run(&crate::load(base, sup)?)
+pub fn doit<P: AsRef<Path>>(base: P, sup: P, eps: f64) -> Result<(), Box<dyn std::error::Error>> {
+    run(&crate::load(base, sup)?, eps)
 }
 
-fn run(df: &DataFrame) -> Result<(), Box<dyn Error>> {
+fn run(df: &DataFrame, eps: f64) -> Result<(), Box<dyn Error>> {
     let array = df.to_ndarray::<Float64Type>(IndexOrder::C)?;
 
     let last_col = array.ncols() - 1;
@@ -35,7 +35,7 @@ fn run(df: &DataFrame) -> Result<(), Box<dyn Error>> {
 
     let (train, test) = dataset.split_with_ratio(0.9);
 
-    let params = Svm::<_, Pr>::params().gaussian_kernel(30.0);
+    let params = Svm::<_, Pr>::params().gaussian_kernel(eps);
 
     let model = train
         .one_vs_all()?
@@ -46,9 +46,7 @@ fn run(df: &DataFrame) -> Result<(), Box<dyn Error>> {
 
     let predict = model.predict(&test);
     let cm = predict.confusion_matrix(&test)?;
-    println!("confusion matrix:{cm:?}");
-    let accuracy = cm.accuracy();
-    println!("accuracy:{accuracy}");
+    crate::print_cm_stats(&cm);
 
     Ok(())
 }

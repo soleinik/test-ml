@@ -31,22 +31,20 @@ fn run(df: &DataFrame) -> Result<(), Box<dyn Error>> {
         .map_targets(|x| *x as usize)
         .with_feature_names(feature_names.clone());
 
-    let model = linfa::traits::Fit::fit(&LinearScaler::<f64>::min_max(), &dataset)?;
-    let ds_transformed: Dataset<f64, usize, Ix1> = model.transform(dataset); //: Dataset<f64, usize, Ix1>
+    // let model = linfa::traits::Fit::fit(&LinearScaler::<f64>::min_max(), &dataset)?;
+    // let ds_transformed: Dataset<f64, usize, Ix1> = model.transform(dataset); //: Dataset<f64, usize, Ix1>
 
-    //normalized
-    trace!("{ds_transformed:#?}");
+    // //normalized
+    // trace!("{ds_transformed:#?}");
 
-    let (train, test) = ds_transformed.split_with_ratio(0.9);
+    let (train, test) = dataset.split_with_ratio(0.9);
 
     use linfa_trees::DecisionTree;
     let model = DecisionTree::params().fit(&train).unwrap();
 
     let predict = model.predict(&test);
     let cm = predict.confusion_matrix(&test)?;
-    println!("confusion matrix:{cm:?}");
-    let accuracy = cm.accuracy();
-    println!("accuracy:{accuracy}");
+    crate::print_cm_stats(&cm);
 
     Ok(())
 }

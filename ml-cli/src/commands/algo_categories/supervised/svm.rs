@@ -9,14 +9,14 @@ mod support_vector_machines;
 
 #[derive(Debug, Clone)]
 pub enum SupportVectorMachines {
-    SVM,
+    SVM { eps: f64 },
 }
 
 impl Runner for SupportVectorMachines {
     fn run(&self, _cli: &crate::Cli) -> Result<(), Box<dyn Error>> {
         match self {
-            SupportVectorMachines::SVM => {
-                ml_lib::preamble::svm::doit("./data/IBM-5y.csv", "./data/^GSPC-5y.csv")
+            SupportVectorMachines::SVM { eps } => {
+                ml_lib::preamble::svm::doit("./data/IBM-5y.csv", "./data/^GSPC-5y.csv", *eps)
             }
         }
     }
@@ -26,13 +26,22 @@ impl TryFrom<&ArgMatches> for SupportVectorMachines {
     type Error = String;
 
     fn try_from(matches: &ArgMatches) -> Result<Self, Self::Error> {
-        let Some((cmd_name, _nxt_matches)) = matches.subcommand() else {
+        let Some((cmd_name, nxt_matches)) = matches.subcommand() else {
             //todo - throw exception
             panic!("todo-01 - can't find sub command");
         };
 
         match cmd_name {
-            support_vector_machines::CMD_SUPPORT_VECTOR_MACHINES => Ok(SupportVectorMachines::SVM),
+            support_vector_machines::CMD_SUPPORT_VECTOR_MACHINES => {
+                let Some(eps) = nxt_matches.get_one::<f64>(support_vector_machines::ARG_EPS) else {
+                    //this should never happen - we provide arg's default
+                    panic!("this should never happen - we provide default eps value for SVM")
+                };
+
+                Ok(SupportVectorMachines::SVM {
+                    eps: eps.to_owned(),
+                })
+            }
             _ => {
                 error!("Algorithm \"{cmd_name}\" is not supported");
                 std::process::exit(1);

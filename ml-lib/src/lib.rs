@@ -1,5 +1,7 @@
+use std::fmt::Display;
 use std::path::Path;
 
+use linfa::metrics::ConfusionMatrix;
 use log::debug;
 use polars::frame::DataFrame;
 use polars::lazy::dsl::when;
@@ -62,4 +64,11 @@ fn load<P: AsRef<Path>>(base: P, sup: P) -> Result<DataFrame, Box<dyn std::error
     debug!("{df}");
 
     Ok(df)
+}
+
+fn print_cm_stats<T: Display>(cm: &ConfusionMatrix<T>) {
+    println!("confusion matrix:{cm:?}");
+    println!("accuracy {}", cm.accuracy(),);
+    println!("precision {}", cm.precision(),);
+    println!("recall {}", cm.recall(),);
 }
